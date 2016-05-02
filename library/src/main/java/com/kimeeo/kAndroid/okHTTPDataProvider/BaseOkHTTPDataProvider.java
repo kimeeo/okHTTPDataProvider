@@ -68,19 +68,21 @@ abstract public class BaseOkHTTPDataProvider extends BackgroundNetworkDataProvid
             body = RequestBody.create(getMediaType(), (String)param);
         }
         */
-
-        Request request = new Request.Builder().post(body).url(url).build();
-        try {
-            if(client!=null) {
-                Response response = client.newCall(request).execute();
-                String value = response.body().string();
-                dataHandler(url, value);
+        if(body!=null) {
+            Request request = new Request.Builder().post(body).url(url).build();
+            try {
+                if (client != null) {
+                    Response response = client.newCall(request).execute();
+                    String value = response.body().string();
+                    dataHandler(url, value);
+                } else
+                    dataLoadError("NULL CLIENT");
+            } catch (IOException e) {
+                dataLoadError(e);
             }
-            else
-                dataLoadError("NULL CLIENT");
-        } catch (IOException e) {
-            dataLoadError(e);
         }
+        else
+            dataLoadError("NO PARAM");
     }
     private void invokeGetService(String url)
     {
