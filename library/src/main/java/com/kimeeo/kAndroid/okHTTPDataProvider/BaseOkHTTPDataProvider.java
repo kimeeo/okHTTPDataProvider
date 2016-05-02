@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -44,7 +46,7 @@ abstract public class BaseOkHTTPDataProvider extends BackgroundNetworkDataProvid
     protected abstract RequestBody getNextRequestBody();
     protected abstract RequestBody getRefreshRequestBody();
 
-    private void invokePostService(String url, RequestBody body)
+    private void invokePostService(final String url, RequestBody body)
     {
         /*
         RequestBody body = null;
@@ -70,34 +72,45 @@ abstract public class BaseOkHTTPDataProvider extends BackgroundNetworkDataProvid
         */
         if(body!=null) {
             Request request = new Request.Builder().post(body).url(url).build();
-            try {
-                if (client != null) {
-                    Response response = client.newCall(request).execute();
-                    String value = response.body().string();
-                    dataHandler(url, value);
-                } else
-                    dataLoadError("NULL CLIENT");
-            } catch (IOException e) {
-                dataLoadError(e);
-            }
+            if (client != null) {
+                Callback callback =new Callback(){
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        dataLoadError(e);
+                    }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String value = response.body().string();
+                        dataHandler(url, value);
+                    }
+                };
+                client.newCall(request).enqueue(callback);
+
+            } else
+                dataLoadError("NULL CLIENT");
         }
         else
             dataLoadError("NO PARAM");
     }
-    private void invokeGetService(String url)
+    private void invokeGetService(final String url)
     {
         Request request = new Request.Builder().url(url).build();
-        try {
-            if(client!=null) {
-                Response response = client.newCall(request).execute();
-                String value = response.body().string();
-                dataHandler(url, value);
-            }
-            else
-                dataLoadError("NULL CLIENT");
-        } catch (IOException e) {
-            dataLoadError(e);
+        if(client!=null) {
+            Callback callback =new Callback(){
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    dataLoadError(e);
+                }
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String value = response.body().string();
+                    dataHandler(url, value);
+                }
+            };
+            client.newCall(request).enqueue(callback);
         }
+        else
+            dataLoadError("NULL CLIENT");
     }
     abstract protected void dataHandler(String url, String json);
 
