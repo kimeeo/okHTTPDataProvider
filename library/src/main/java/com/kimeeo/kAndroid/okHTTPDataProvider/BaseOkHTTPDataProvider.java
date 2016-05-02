@@ -38,18 +38,15 @@ abstract public class BaseOkHTTPDataProvider extends BackgroundNetworkDataProvid
     {
 
     }
+    final protected Object getNextParam(){return null;}
+    final protected Object getRefreshParam() {return null;}
 
-    public MediaType getMediaType()
-    {
-        return MediaType.parse("application/text; charset=utf-8");
-    };
-    public String getRefreshParamString()
-    {
-        return null;
-    };
+    protected abstract RequestBody getNextRequestBody();
+    protected abstract RequestBody getRefreshRequestBody();
 
-    private void invokePostService(String url, Object param)
+    private void invokePostService(String url, RequestBody body)
     {
+        /*
         RequestBody body = null;
 
         if(param instanceof Map) {
@@ -70,6 +67,7 @@ abstract public class BaseOkHTTPDataProvider extends BackgroundNetworkDataProvid
         {
             body = RequestBody.create(getMediaType(), (String)param);
         }
+        */
 
         Request request = new Request.Builder().post(body).url(url).build();
         try {
@@ -110,7 +108,7 @@ abstract public class BaseOkHTTPDataProvider extends BackgroundNetworkDataProvid
             }
             else if (getMethod() == METHOD_POST) {
                 if(getNextParam()!=null)
-                    invokePostService(url,getNextParam());
+                    invokePostService(url,getNextRequestBody());
             }
         }
         else {
@@ -118,6 +116,9 @@ abstract public class BaseOkHTTPDataProvider extends BackgroundNetworkDataProvid
             dataLoadError(null);
         }
     }
+
+
+
     protected void invokeloadRefresh()
     {
         String url = getRefreshURL();
@@ -126,7 +127,7 @@ abstract public class BaseOkHTTPDataProvider extends BackgroundNetworkDataProvid
                 invokeGetService(url);
             else if (getMethod() == METHOD_POST) {
                 if(getRefreshParam()!=null)
-                    invokePostService(url,getRefreshParam());
+                    invokePostService(url,getRefreshRequestBody());
             }
         }
         else {
@@ -134,4 +135,5 @@ abstract public class BaseOkHTTPDataProvider extends BackgroundNetworkDataProvid
             dataLoadError(null);
         }
     }
+
 }
