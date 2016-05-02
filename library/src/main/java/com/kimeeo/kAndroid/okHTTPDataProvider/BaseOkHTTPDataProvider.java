@@ -24,7 +24,7 @@ import okhttp3.Response;
 /**
  * Created by BhavinPadhiyar on 02/05/16.
  */
-abstract public class BaseOkHTTPDataProvider extends BackgroundNetworkDataProvider
+abstract public class BaseOkHTTPDataProvider extends NetworkDataProvider
 {
     OkHttpClient client;
     public BaseOkHTTPDataProvider(OkHttpClient client)
