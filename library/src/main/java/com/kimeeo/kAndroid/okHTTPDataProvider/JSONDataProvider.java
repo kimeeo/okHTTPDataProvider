@@ -43,7 +43,8 @@ abstract public class JSONDataProvider extends BaseOkHTTPDataProvider
                         ((IParseableObject) list.get(i)).dataLoaded(dataModel);
                 }
                 dataIn(url,dataModel);
-                addData(list);
+                addDataThreadSafe(list);
+                //addData(list);
             }
             else
             {
