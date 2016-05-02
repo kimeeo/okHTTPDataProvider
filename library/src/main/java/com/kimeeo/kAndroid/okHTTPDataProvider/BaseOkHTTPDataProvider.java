@@ -1,6 +1,8 @@
 package com.kimeeo.kAndroid.okHTTPDataProvider;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.kimeeo.kAndroid.listViews.dataProvider.BackgroundNetworkDataProvider;
 import com.kimeeo.kAndroid.listViews.dataProvider.NetworkDataProvider;
@@ -75,13 +77,31 @@ abstract public class BaseOkHTTPDataProvider extends NetworkDataProvider
             if (client != null) {
                 Callback callback =new Callback(){
                     @Override
-                    public void onFailure(Call call, IOException e) {
-                        dataLoadError(e);
+                    public void onFailure(Call call,final IOException e) {
+                        Handler mainHandler = new Handler(Looper.getMainLooper());
+                        mainHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                dataLoadError(e);
+                            }
+                        });
                     }
                     @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String value = response.body().string();
-                        dataHandler(url, value);
+                    public void onResponse(Call call, final Response response) throws IOException {
+
+                        Handler mainHandler = new Handler(Looper.getMainLooper());
+                        mainHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                String value = null;
+                                try {
+                                    value = response.body().string();
+                                    dataHandler(url, value);
+                                } catch (IOException e) {
+                                    dataLoadError(e);
+                                }
+                            }
+                        });
                     }
                 };
                 client.newCall(request).enqueue(callback);
@@ -98,13 +118,32 @@ abstract public class BaseOkHTTPDataProvider extends NetworkDataProvider
         if(client!=null) {
             Callback callback =new Callback(){
                 @Override
-                public void onFailure(Call call, IOException e) {
-                    dataLoadError(e);
+                public void onFailure(Call call,final IOException e) {
+                    Handler mainHandler = new Handler(Looper.getMainLooper());
+                    mainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            dataLoadError(e);
+                        }
+                    });
                 }
                 @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    String value = response.body().string();
-                    dataHandler(url, value);
+                public void onResponse(Call call, final Response response) throws IOException {
+                    Handler mainHandler = new Handler(Looper.getMainLooper());
+                    mainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            String value = null;
+                            try {
+                                value = response.body().string();
+                                dataHandler(url, value);
+                            } catch (IOException e) {
+                                dataLoadError(e);
+                            }
+                        }
+                    });
+
+
                 }
             };
             client.newCall(request).enqueue(callback);
