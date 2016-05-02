@@ -5,10 +5,12 @@ import android.content.Context;
 import com.kimeeo.kAndroid.listViews.dataProvider.BackgroundNetworkDataProvider;
 import com.kimeeo.kAndroid.listViews.dataProvider.NetworkDataProvider;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -41,10 +43,6 @@ abstract public class BaseOkHTTPDataProvider extends BackgroundNetworkDataProvid
     {
         return MediaType.parse("application/text; charset=utf-8");
     };
-    public String getNextParamString()
-    {
-        return null;
-    };
     public String getRefreshParamString()
     {
         return null;
@@ -57,8 +55,16 @@ abstract public class BaseOkHTTPDataProvider extends BackgroundNetworkDataProvid
         if(param instanceof Map) {
             Map<String, Object> params = (Map<String, Object>) param;
             if (params != null && params.entrySet().size() != 0) {
-                
+                FormBody.Builder builder= new FormBody.Builder();
+                Map<String, Object> paramsMap = (Map<String, Object>) param;
+                for (Map.Entry<String, Object> stringObjectEntry : paramsMap.entrySet()) {
+                    builder.add(stringObjectEntry.getKey(), (String) stringObjectEntry.getValue());
+                }
+                body = builder.build();
             }
+        }
+        else if(param instanceof File) {
+            body = RequestBody.create(getMediaType(), (File)param);
         }
         else if(param instanceof String)
         {
@@ -105,8 +111,6 @@ abstract public class BaseOkHTTPDataProvider extends BackgroundNetworkDataProvid
             else if (getMethod() == METHOD_POST) {
                 if(getNextParam()!=null)
                     invokePostService(url,getNextParam());
-                else if(getNextParamString()!=null)
-                    invokePostService(url,getNextParamString());
             }
         }
         else {
@@ -123,8 +127,6 @@ abstract public class BaseOkHTTPDataProvider extends BackgroundNetworkDataProvid
             else if (getMethod() == METHOD_POST) {
                 if(getRefreshParam()!=null)
                     invokePostService(url,getRefreshParam());
-                else if(getRefreshParamString()!=null)
-                    invokePostService(url,getRefreshParamString());
             }
         }
         else {
