@@ -31,11 +31,11 @@ abstract public class JSONFallbackOfflineDataProvider extends JSONDataProvider {
         else
             listDataIn(offlineListProvider.getData(getNextURL(),getNextParam()));
     }
-
-    protected void invokeloadRefresh()
+    @Override
+    protected void invokeLoadRefresh()
     {
         if(isConnected)
-            super.invokeloadRefresh();
+            super.invokeLoadRefresh();
         else
             listDataIn(offlineListProvider.getData(getNextURL(), getRefreshParam()));
     }
