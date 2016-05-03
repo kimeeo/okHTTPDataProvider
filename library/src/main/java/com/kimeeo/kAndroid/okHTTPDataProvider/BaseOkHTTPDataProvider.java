@@ -152,7 +152,7 @@ abstract public class BaseOkHTTPDataProvider extends NetworkDataProvider
             dataLoadError("NULL CLIENT");
     }
     abstract protected void dataHandler(String url, String json);
-
+    @Override
     protected void invokeLoadNext()
     {
         String url = getNextURL();
@@ -172,8 +172,8 @@ abstract public class BaseOkHTTPDataProvider extends NetworkDataProvider
     }
 
 
-
-    protected void invokeloadRefresh()
+    @Override
+    protected void invokeLoadRefresh()
     {
         String url = getRefreshURL();
         if(url!=null) {
