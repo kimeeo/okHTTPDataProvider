@@ -26,6 +26,9 @@ import okhttp3.Response;
 /**
  * Created by BhavinPadhiyar on 02/05/16.
  */
+/**
+ * Created by BhavinPadhiyar on 02/05/16.
+ */
 abstract public class BaseOkHTTPDataProvider extends NetworkDataProvider
 {
     OkHttpClient client;
@@ -50,64 +53,9 @@ abstract public class BaseOkHTTPDataProvider extends NetworkDataProvider
 
     private void invokePostService(final String url, RequestBody body)
     {
-        /*
-        RequestBody body = null;
-
-        if(param instanceof Map) {
-            Map<String, Object> params = (Map<String, Object>) param;
-            if (params != null && params.entrySet().size() != 0) {
-                FormBody.Builder builder= new FormBody.Builder();
-                Map<String, Object> paramsMap = (Map<String, Object>) param;
-                for (Map.Entry<String, Object> stringObjectEntry : paramsMap.entrySet()) {
-                    builder.add(stringObjectEntry.getKey(), (String) stringObjectEntry.getValue());
-                }
-                body = builder.build();
-            }
-        }
-        else if(param instanceof File) {
-            body = RequestBody.create(getMediaType(), (File)param);
-        }
-        else if(param instanceof String)
-        {
-            body = RequestBody.create(getMediaType(), (String)param);
-        }
-        */
         if(body!=null) {
             Request request = new Request.Builder().post(body).url(url).build();
-            if (client != null) {
-                Callback callback =new Callback(){
-                    @Override
-                    public void onFailure(Call call,final IOException e) {
-                        Handler mainHandler = new Handler(Looper.getMainLooper());
-                        mainHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                dataLoadError(e);
-                            }
-                        });
-                    }
-                    @Override
-                    public void onResponse(Call call, final Response response) throws IOException {
-
-                        Handler mainHandler = new Handler(Looper.getMainLooper());
-                        mainHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                String value = null;
-                                try {
-                                    value = response.body().string();
-                                    dataHandler(url, value);
-                                } catch (IOException e) {
-                                    dataLoadError(e);
-                                }
-                            }
-                        });
-                    }
-                };
-                client.newCall(request).enqueue(callback);
-
-            } else
-                dataLoadError("NULL CLIENT");
+            callServcice(request,url);
         }
         else
             dataLoadError("NO PARAM");
@@ -115,10 +63,14 @@ abstract public class BaseOkHTTPDataProvider extends NetworkDataProvider
     private void invokeGetService(final String url)
     {
         Request request = new Request.Builder().url(url).build();
+        callServcice(request,url);
+    }
+
+    private void callServcice(Request request,final String url) {
         if(client!=null) {
             Callback callback =new Callback(){
                 @Override
-                public void onFailure(Call call,final IOException e) {
+                public void onFailure(Call call, final IOException e) {
                     Handler mainHandler = new Handler(Looper.getMainLooper());
                     mainHandler.post(new Runnable() {
                         @Override
@@ -129,28 +81,31 @@ abstract public class BaseOkHTTPDataProvider extends NetworkDataProvider
                 }
                 @Override
                 public void onResponse(Call call, final Response response) throws IOException {
+
                     Handler mainHandler = new Handler(Looper.getMainLooper());
-                    mainHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            String value = null;
-                            try {
-                                value = response.body().string();
-                                dataHandler(url, value);
-                            } catch (IOException e) {
-                                dataLoadError(e);
+                    try {
+                        final String value = response.body().string();
+                        mainHandler.post(new Runnable() {
+                            @Override
+                            public void run() {dataHandler(url, value);
                             }
-                        }
-                    });
-
-
+                        });
+                    } catch (final IOException e) {
+                        mainHandler.post(new Runnable() {
+                            @Override
+                            public void run() {dataLoadError(e);
+                            }
+                        });
+                    }
                 }
             };
-            client.newCall(request).enqueue(callback);
+            Call call = client.newCall(request);
+            call.enqueue(callback);
         }
         else
             dataLoadError("NULL CLIENT");
     }
+
     abstract protected void dataHandler(String url, String json);
     @Override
     protected void invokeLoadNext()
@@ -191,3 +146,4 @@ abstract public class BaseOkHTTPDataProvider extends NetworkDataProvider
     }
 
 }
+
