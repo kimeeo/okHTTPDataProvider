@@ -53,7 +53,6 @@ abstract public class BaseOkHTTPDataProvider extends NetworkDataProvider
 
     private void invokePostService(final String url, RequestBody body)
     {
-
         if(body!=null) {
             Request request = new Request.Builder().post(body).url(url).build();
             callServcice(request,url);
