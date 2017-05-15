@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         minSdkVersion 15
@@ -25,8 +25,8 @@ dependencies {
     compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
 
 
-    final KANDROID_LISTVIEW_VERSION ='eefa65b';
-    compile "com.github.kimeeo:KAndroid_ListView:$KANDROID_LISTVIEW_VERSION"
+    final KANDROID_DATAPROVDER_VERSION = 'V3.0.7Beta'
+    compile "com.github.kimeeo:KAndroid_DataProvider:$KANDROID_DATAPROVDER_VERSION"
 
     //http://square.github.io/okhttp/
     compile 'com.squareup.okhttp3:okhttp:3.6.0'

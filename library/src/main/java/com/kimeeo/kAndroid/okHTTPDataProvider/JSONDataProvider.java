@@ -3,9 +3,9 @@ package com.kimeeo.kAndroid.okHTTPDataProvider;
 import android.content.Context;
 
 import com.google.gson.Gson;
-import com.kimeeo.kAndroid.listViews.dataProvider.BackgroundNetworkDataProvider;
-import com.kimeeo.kAndroid.listViews.dataProvider.DataModel;
-import com.kimeeo.kAndroid.listViews.dataProvider.IParseableObject;
+import com.kimeeo.kAndroid.dataProvider.BackgroundNetworkDataProvider;
+import com.kimeeo.kAndroid.dataProvider.DataModel;
+import com.kimeeo.kAndroid.dataProvider.IParseableObject;
 
 
 import java.util.List;

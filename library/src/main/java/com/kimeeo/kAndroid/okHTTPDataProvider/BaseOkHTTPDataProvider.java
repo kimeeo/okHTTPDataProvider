@@ -4,8 +4,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.kimeeo.kAndroid.listViews.dataProvider.BackgroundNetworkDataProvider;
-import com.kimeeo.kAndroid.listViews.dataProvider.NetworkDataProvider;
+import com.kimeeo.kAndroid.dataProvider.BackgroundNetworkDataProvider;
+import com.kimeeo.kAndroid.dataProvider.NetworkDataProvider;
 
 import java.io.File;
 import java.io.IOException;
