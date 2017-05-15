@@ -1,13 +1,8 @@
 package com.kimeeo.kAndroid.okHTTPDataProvider;
 
-import android.content.Context;
-
 import com.google.gson.Gson;
-import com.kimeeo.kAndroid.dataProvider.BackgroundNetworkDataProvider;
 import com.kimeeo.kAndroid.dataProvider.DataModel;
 import com.kimeeo.kAndroid.dataProvider.IParseableObject;
-
-
 import java.util.List;
 
 import okhttp3.OkHttpClient;

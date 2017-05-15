@@ -1,21 +1,11 @@
 package com.kimeeo.kAndroid.okHTTPDataProvider;
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-
-import com.kimeeo.kAndroid.dataProvider.BackgroundNetworkDataProvider;
 import com.kimeeo.kAndroid.dataProvider.NetworkDataProvider;
-
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;

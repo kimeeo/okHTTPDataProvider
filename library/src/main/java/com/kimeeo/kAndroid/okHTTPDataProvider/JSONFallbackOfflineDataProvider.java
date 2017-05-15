@@ -1,9 +1,7 @@
 package com.kimeeo.kAndroid.okHTTPDataProvider;
 
 import android.content.Context;
-
 import com.kimeeo.kAndroid.core.utils.NetworkUtilities;
-
 import java.util.List;
 
 import okhttp3.OkHttpClient;
