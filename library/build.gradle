@@ -21,11 +21,11 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    final SUPPORT_LIBRARY_VERSION = '25.3.0'
+    final SUPPORT_LIBRARY_VERSION = '25.4.0'
     compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
 
 
-    final KANDROID_DATAPROVDER_VERSION = 'V3.0.7Beta'
+    final KANDROID_DATAPROVDER_VERSION = 'Ant-V1.0.0'
     compile "com.github.kimeeo:KAndroid_DataProvider:$KANDROID_DATAPROVDER_VERSION"
 
     //http://square.github.io/okhttp/
